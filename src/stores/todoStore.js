@@ -4,11 +4,15 @@ import axios from "axios";
 export const useTodoStore = defineStore('todo', {
     state: () => ({
         todos: [],
+        selectedTodo: [],
     }),
     getters: {
         getTodos(state) {
             console.log("these are the todos----------->", state.todos)
             return state.todos;
+        },
+        getSelectedTodo(state) {
+            return state.selectedTodo;
         }
     },
     actions: {
@@ -52,6 +56,16 @@ export const useTodoStore = defineStore('todo', {
             });
             console.log("response----------> ", response.data.items.data);
             this.todos = response.data.items.data;
+        },
+        async fetchTodoById(todoId) {
+            const userToken = localStorage.getItem("userAuth");
+            const response = await axios.get(`/api/item/${todoId}  `, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+            console.log("response----------> ", response.data.items.data);
+            this.selectedTodo = response.data.items.data;
         }
     },
 });
