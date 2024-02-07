@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 
 export const useTodoStore = defineStore('todo', {
     state: () => ({
-        todos: [], // Initialize an empty array for storing ToDo items
+        todos: [], 
     }),
     getters: {
         getTodos(state) {
