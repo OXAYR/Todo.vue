@@ -1,4 +1,3 @@
-// todoStore.js
 
 import { defineStore } from 'pinia';
 import axios from "axios";
@@ -12,24 +11,40 @@ export const useTodoStore = defineStore('todo', {
         },
     },
     actions: {
-        // Implement actions for CRUD operations (create, read, update, delete)
         async addTodo(newTodo) {
             const userToken = localStorage.getItem("userAuth");
             const response = await axios.post('/api/item', newTodo, {
                 headers: {
-                    Authorization: `Bearer ${userToken}`, // Attach the bearer token
+                    Authorization: `Bearer ${userToken}`,
                 },
             });
             console.log("response--------->", response)
             this.todos.push(newTodo);
         },
-        updateTodo(updatedTodo) {
-            // Implement logic to update a specific ToDo item
-            // ...
+        async updateTodo(updatedTodo) {
+            const userToken = localStorage.getItem("userAuth");
+            const response = await axios.put('/api/item', newTodo, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
         },
-        deleteTodo(todoId) {
-            // Implement logic to delete a specific ToDo item
-            // ...
+        async deleteTodo(todoId) {
+            const userToken = localStorage.getItem("userAuth");
+            const response = await axios.delete('/api/item', newTodo, {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
         },
+        async getTodo() {
+            const userToken = localStorage.getItem("userAuth");
+            const response = await axios.get('/api/item', {
+                headers: {
+                    Authorization: `Bearer ${userToken}`,
+                },
+            });
+            console.log("response----------> ", response);
+        }
     },
 });
