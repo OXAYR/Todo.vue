@@ -84,7 +84,7 @@
 <script setup>
 	import { ref, computed, onMounted } from "vue";
 	import axios from "axios";
-	import { useTodoStore } from "./todoStore";
+	import { useTodoStore } from "@/stores/todoStore";
 	import { useRoute, useRouter } from "vue-router";
 	const route = useRoute();
 	const router = useRouter();
@@ -115,20 +115,17 @@
 		}
 
 		if (mode.value === "add") {
-			const todoItem = {
-				id: Date.now(),
-				...newTodo.value,
-			};
-			addTodo(todoItem);
+			addTodo(newTodo);
 		} else {
-			// Update an existing ToDo item
-			// You'll need to implement the logic to find the specific ToDo item to update
-			// and call the updateTodo action.
-			// ...
+			updateTodo(newTodo);
 		}
 
 		newTodo.value = { title: "", description: "" };
 	}
 
-	function extractTodoIdFromRoute() {}
+	function extractTodoIdFromRoute() {
+		// Assuming you're using Vue Router and the route has a parameter named "id"
+		const todoId = currentRoute.value.params.id;
+		return todoId;
+	}
 </script>

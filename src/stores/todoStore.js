@@ -26,9 +26,9 @@ export const useTodoStore = defineStore('todo', {
             console.log("response--------->", response)
             this.todos.push(newTodo);
         },
-        async updateTodo(updatedTodo) {
+        async updateTodo(updatedTodo, todoId) {
             const userToken = localStorage.getItem("userAuth");
-            const response = await axios.put('/api/item', newTodo, {
+            const response = await axios.put('/api/item', updatedTodo, {
                 headers: {
                     Authorization: `Bearer ${userToken}`,
                 },
