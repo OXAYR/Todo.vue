@@ -6,8 +6,9 @@
 				v-for="todo in allTodos"
 				:key="todo.id"
 			>
-				{{ todo.title }} - {{ todo.description }}
-				<button @click="deleteTodo(todo.id)">Delete</button>
+				<strong>{{ todo.title }}</strong>
+				<p>{{ todo.description }}</p>
+				<!-- <button @click="deleteTodo(todo.id)">Delete</button> -->
 			</li>
 		</ul>
 	</div>
@@ -15,14 +16,17 @@
 
 <script setup>
 	import { ref, computed, onMounted } from "vue";
-	import { useTodoStore } from "@/stores/todoStore";
+    import { useTodoStore } from "@/stores/todoStore";
 
-	const { getTodos, deleteTodo, fetchTodos } = useTodoStore();
-	const todos = ref([]);
+    const todoStore = useTodoStore();
+    const todos = ref([]);
 
-	const allTodos = computed(() => getTodos);
+    const allTodos = computed(() => todoStore.getTodos);
+    console.log("All todos----->", allTodos);
 
-	onMounted(async () => {
-		await fetchTodos();
-	});
+    const fetchTodos = async () => {
+        await todoStore.fetchTodos();
+    };
+
+    onMounted(fetchTodos);
 </script>

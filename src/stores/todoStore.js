@@ -6,7 +6,10 @@ export const useTodoStore = defineStore('todo', {
         todos: [],
     }),
     getters: {
-        getTodos: (state) => state.todos,
+        getTodos(state) {
+            console.log("these are the todos----------->", state.todos)
+            return state.todos;
+        }
     },
     actions: {
         async addTodo(newTodo) {
@@ -42,7 +45,8 @@ export const useTodoStore = defineStore('todo', {
                     Authorization: `Bearer ${userToken}`,
                 },
             });
-            console.log("response----------> ", response);
+            console.log("response----------> ", response.data.items.data);
+            this.todos = response.data.items.data;
         }
     },
 });
