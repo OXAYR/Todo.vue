@@ -39,7 +39,7 @@ export const useTodoStore = defineStore('todo', {
         },
         async fetchTodos() {
             const userToken = localStorage.getItem("userAuth");
-            const response = await axios.get('/api/item', {
+            const response = await axios.get('/api/items', {
                 headers: {
                     Authorization: `Bearer ${userToken}`,
                 },
