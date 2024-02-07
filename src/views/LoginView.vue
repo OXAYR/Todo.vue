@@ -1,9 +1,10 @@
 <template>
-  <div>
-    <Login />
-  </div>
+	<div>
+		<addTodo />
+	</div>
 </template>
 
 <script setup>
-import Login from "@/components/Login.vue";
+	import Login from "@/components/Login.vue";
+	import addTodo from "@/components/addTodo.vue";
 </script>
