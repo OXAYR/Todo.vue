@@ -31,12 +31,17 @@ export const useTodoStore = defineStore('todo', {
             });
         },
         async deleteTodo(todoId) {
+            console.log("Todoid------------>", todoId)
             const userToken = localStorage.getItem("userAuth");
-            const response = await axios.delete('/api/item', newTodo, {
+            const response = await axios.delete(`/api/item/${todoId}`, {
                 headers: {
                     Authorization: `Bearer ${userToken}`,
                 },
             });
+            const deletedIndex = this.todos.findIndex((todo) => todo.id === todoId);
+            const deletedTodo = this.todos[deletedIndex];
+            console.log("deleted todo --------->", deletedTodo);
+            this.todos.splice(deletedIndex, 1);
         },
         async fetchTodos() {
             const userToken = localStorage.getItem("userAuth");

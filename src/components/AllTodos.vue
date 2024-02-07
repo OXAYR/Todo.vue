@@ -8,7 +8,7 @@
 			>
 				<strong>{{ todo.title }}</strong>
 				<p>{{ todo.description }}</p>
-				<!-- <button @click="deleteTodo(todo.id)">Delete</button> -->
+				<button @click="todoStore.deleteTodo(todo.id)">Delete</button>
 			</li>
 		</ul>
 	</div>
