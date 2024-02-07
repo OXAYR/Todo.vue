@@ -14,13 +14,13 @@
 </template>
 
 <script setup>
-	import { ref, computed } from "vue";
+	import { ref, computed, onMounted } from "vue";
 	import { useTodoStore } from "@/stores/todoStore";
 
 	const { getTodos, deleteTodo, fetchTodos } = useTodoStore();
 	const todos = ref([]);
 
-	const allTodos = computed(() => getTodos());
+	const allTodos = computed(() => getTodos);
 
 	onMounted(async () => {
 		await fetchTodos();

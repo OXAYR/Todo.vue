@@ -6,9 +6,7 @@ export const useTodoStore = defineStore('todo', {
         todos: [],
     }),
     getters: {
-        getTodos(state) {
-            return state.todos;
-        },
+        getTodos: (state) => state.todos,
     },
     actions: {
         async addTodo(newTodo) {
