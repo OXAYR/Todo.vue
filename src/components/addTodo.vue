@@ -74,7 +74,7 @@
 		} else {
 			await todoStore.updateTodo(newTodo.value, route.params.id);
 		}
-		router.push("/todos");
+		router.push("/home/todos");
 		newTodo.value = { title: "", description: "" };
 	}
 </script>

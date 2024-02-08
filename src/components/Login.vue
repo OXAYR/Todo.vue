@@ -57,7 +57,7 @@
 	const toValidateForm = async () => {
 		if (formLogin.value.email !== "" && formLogin.value.password !== "") {
 			await userStore.loginAuth(formLogin.value);
-			// router.push("/home");
+			router.push("/home");
 		}
 	};
 </script>

@@ -41,14 +41,14 @@
 
 <script setup>
 	import { ref } from "vue";
-	import { useStore } from "vuex";
 	import { useRouter } from "vue-router";
 
+	import { useUserStore } from "@/stores/userStore";
+
 	const form = ref({
-		name: "",
 		email: "",
 		password: "",
-		userRole: "user",
+		confirmPassword: "",
 	});
 
 	const confirmPassword = ref("");
@@ -59,7 +59,7 @@
 		confirmPassword: "",
 	});
 
-	const store = useStore();
+	const userStore = useUserStore();
 	const router = useRouter();
 	const toValidateForm = (obj) => {
 		validationErrors.value = [];

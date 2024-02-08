@@ -46,7 +46,7 @@
 	};
 
 	const editTodo = async (todoId) => {
-		await router.push({ path: `/todo/edit/${todoId}` });
+		await router.push({ path: `home/todo/edit/${todoId}` });
 	};
 
 	const loadNextPage = async () => {
