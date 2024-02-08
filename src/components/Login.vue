@@ -80,7 +80,7 @@
 				Object.keys(userStore.validationErrors).length === 0 &&
 				!userStore.loginErrorMessage
 			) {
-				router.push("/home");
+				router.push("/");
 			}
 		}
 	};
