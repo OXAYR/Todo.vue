@@ -104,6 +104,6 @@
 
 	const logout = async () => {
 		await userStore.logout(userAuth);
-		router.push("/");
+		router.push("/login");
 	};
 </script>

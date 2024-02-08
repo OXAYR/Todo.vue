@@ -29,7 +29,7 @@ export const useUserStore = defineStore('user', {
                 localStorage.setItem("user", JSON.stringify(data.user));
                 localStorage.setItem("userAuth", data.user.token);
                 this.user = data.data;
-                this.loginErrorMessage = ''; // Clear login error message on successful login
+                this.loginErrorMessage = ''; 
             } catch (error) {
                 this.isLoading = false;
                 console.log(error);
@@ -40,12 +40,12 @@ export const useUserStore = defineStore('user', {
                         if (errorMsg.includes("email")) {
                             console.log("error-->", errorMsg);
                             this.validationErrors.email = errorMsg;
-                        } else if (errorMsg.includes("password")) { // Handle password error specifically
-                            this.loginErrorMessage = "Invalid password"; // Set login error message for password error
+                        } else if (errorMsg.includes("password")) { 
+                            this.loginErrorMessage = "Invalid password"; 
                         }
                     });
                 }
-                throw error; // Re-throw the error to propagate it to the component
+                throw error; 
             }
         },
         async register(payload) {
@@ -78,7 +78,7 @@ export const useUserStore = defineStore('user', {
             try {
                 this.isLoading = true;
                 console.log("Payload--------->", token);
-                const { data } = await axios.post("/api/logout", token);
+                const { data } = await axios.post("/api/logout", {token});
                 this.isLoading = false;
                 console.log("data------------>", data);
                 localStorage.removeItem("user");
@@ -86,6 +86,20 @@ export const useUserStore = defineStore('user', {
             }
             catch (error) {
                 console.log(error);
+            }
+        },
+
+        async refreshToken(token) {
+            try {
+
+                const response = await axios.post(`/api/refresh-token/${token}`);
+                console.log("respone-------->token", response);
+                const newAccessToken = response.access_token;
+                localStorage.setItem('userAuth', newAccessToken);
+                const tokenExpirationTime = Date.now() / 1000 + 3600;
+                localStorage.setItem('tokenExpirationTime', tokenExpirationTime);
+            } catch (error) {
+                console.error('Error refreshing token:', error);
             }
         }
     }
