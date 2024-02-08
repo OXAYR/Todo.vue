@@ -1,5 +1,5 @@
 <template>
-	<li class="bg-white rounded-lg shadow-md p-4 mb-4">
+	<li class="bg-white rounded-lg p-4 mb-4">
 		<strong class="text-xl font-semibold">{{ todo.title }}</strong>
 		<p class="text-gray-600">{{ todo.description }}</p>
 		<button

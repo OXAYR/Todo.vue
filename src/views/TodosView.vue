@@ -1,14 +1,24 @@
 <template>
-	<div>
-		<h2>All ToDos</h2>
+	<div class="bg-gray-100 p-4 rounded-lg shadow-md">
+		<h2 class="text-2xl font-bold mb-4">All ToDos</h2>
 		<ul ref="todosList">
-			<Todo
+			<div
+				v-show="loading"
+				class="fixed top-0 left-0 w-full h-full flex justify-center items-center z-50 bg-gray-800 bg-opacity-50"
+			>
+				<Loader />
+			</div>
+			<div
 				v-for="todo in allTodos"
 				:key="todo.id"
-				:todo="todo"
-				@delete-todo="deleteTodo"
-				@edit-todo="editTodo"
-			/>
+				class="bg-white rounded-lg shadow-md p-4 mb-4"
+			>
+				<Todo
+					:todo="todo"
+					@delete-todo="deleteTodo"
+					@edit-todo="editTodo"
+				/>
+			</div>
 		</ul>
 	</div>
 </template>
@@ -18,15 +28,14 @@
 	import { useTodoStore } from "@/stores/todoStore";
 	import { useRouter } from "vue-router";
 	import Todo from "@/components/Todo.vue";
-	import axios from "axios";
+	import Loader from "@/components/Loader.vue";
 
 	const router = useRouter();
 	const todoStore = useTodoStore();
-	const todosList = ref(null); // Reference to the <ul> element
+	const todosList = ref(null);
 
 	const allTodos = computed(() => todoStore.getTodos);
-
-	const currentPage = computed(() => todoStore.getCurrentPage);
+	const loading = computed(() => todoStore.isLoading);
 
 	const fetchTodos = async (page) => {
 		await todoStore.fetchTodos(page);
@@ -47,8 +56,9 @@
 			await todoStore.fetchTodos(nextPage);
 		}
 	};
+
 	onMounted(() => {
-		fetchTodos(1); 
+		fetchTodos(1);
 		window.addEventListener("scroll", getNextPageOnScroll);
 	});
 
@@ -58,7 +68,7 @@
 			document.documentElement.scrollHeight - 1;
 
 		console.log("bottom of the window:", bottomOfWindow);
-		if (bottomOfWindow) {
+		if (bottomOfWindow && !loading.value) {
 			loadNextPage();
 		}
 	};
