@@ -73,6 +73,20 @@ export const useUserStore = defineStore('user', {
         },
         clearValidationErrors() {
             this.validationErrors = {};
+        },
+        async logout(token) {
+            try {
+                this.isLoading = true;
+                console.log("Payload--------->", token);
+                const { data } = await axios.post("/api/logout", token);
+                this.isLoading = false;
+                console.log("data------------>", data);
+                localStorage.removeItem("user");
+                localStorage.removeItem("userAuth");
+            }
+            catch (error) {
+                console.log(error);
+            }
         }
-    },
+    }
 });

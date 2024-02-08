@@ -7,17 +7,39 @@
 				</div>
 
 				<div class="hidden md:block">
-					<div class="ml-4 flex items-center md:ml-6">
+					<div
+						class="ml-4 flex items-center md:ml-6"
+						v-if="!isLoggedIn"
+					>
 						<button
 							class="bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium"
+							@click="navigateTo('/login')"
 						>
 							Sign In
 						</button>
 
 						<button
 							class="ml-4 bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium"
+							@click="navigateTo('/signup')"
 						>
 							Register
+						</button>
+					</div>
+					<div
+						class="ml-4 flex items-center md:ml-6"
+						v-else
+					>
+						<button
+							class="bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium"
+							@click="navigateTo('/addtodo')"
+						>
+							Add Todo
+						</button>
+						<button
+							class="ml-4 bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium"
+							@click="logout"
+						>
+							Logout
 						</button>
 					</div>
 				</div>
@@ -52,11 +74,13 @@
 			<div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
 				<button
 					class="block w-full text-left bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium"
+					@click="navigateTo('/login')"
 				>
 					Sign In
 				</button>
 				<button
 					class="mt-1 block w-full text-left bg-gray-900 text-white px-4 py-2 rounded-md text-sm font-medium"
+					@click="navigateTo('/signup')"
 				>
 					Register
 				</button>
@@ -64,4 +88,22 @@
 		</div>
 	</nav>
 </template>
-<script setup></script>
+<script setup>
+	import { useRouter } from "vue-router";
+	import { useUserStore } from "@/stores/userStore";
+
+	const router = useRouter();
+
+	const userStore = useUserStore();
+	const userAuth = localStorage.getItem("userAuth");
+	const isLoggedIn = userAuth ? true : false;
+
+	const navigateTo = (path) => {
+		router.push(path);
+	};
+
+	const logout = async () => {
+		await userStore.logout(userAuth);
+		router.push("/");
+	};
+</script>

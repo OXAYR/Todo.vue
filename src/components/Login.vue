@@ -71,7 +71,7 @@
 	const userStore = useUserStore();
 	const router = useRouter();
 	const validationErrors = computed(() => userStore.validationErrors);
-	const loginErrorMessage = computed(() => userStore.loginErrorMessage); // Get login error message from store
+	const loginErrorMessage = computed(() => userStore.loginErrorMessage); 
 
 	const toValidateForm = async () => {
 		if (formLogin.value.email !== "" && formLogin.value.password !== "") {
