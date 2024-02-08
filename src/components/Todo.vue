@@ -1,9 +1,19 @@
 <template>
-	<li>
-		<strong>{{ todo.title }}</strong>
-		<p>{{ todo.description }}</p>
-		<button @click="deleteTodo(todo.id)">Delete</button>
-		<button @click="editTodo(todo.id)">Edit</button>
+	<li class="bg-white rounded-lg shadow-md p-4 mb-4">
+		<strong class="text-xl font-semibold">{{ todo.title }}</strong>
+		<p class="text-gray-600">{{ todo.description }}</p>
+		<button
+			@click="deleteTodo(todo.id)"
+			class="mt-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+		>
+			Delete
+		</button>
+		<button
+			@click="editTodo(todo.id)"
+			class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+		>
+			Edit
+		</button>
 	</li>
 </template>
 

@@ -12,12 +12,12 @@ const router = createRouter({
       component: LoginView
     },
     {
-      path: '/todo/edit/:id',
+      path: '/todos/edit/:id',
       name: 'todo',
       component: AddTodoView
     },
     {
-      path: '/addtodos',
+      path: '/addtodo',
       component: AddTodoView
     },
     {
