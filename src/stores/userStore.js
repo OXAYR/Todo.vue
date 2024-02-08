@@ -2,15 +2,20 @@
 
 import { defineStore } from 'pinia';
 import axios from "axios";
+
 export const useUserStore = defineStore('user', {
     state: () => ({
         user: {},
         isLoading: false,
+        validationErrors: {}, // Maintain validation errors state
     }),
     getters: {
         getUser(state) {
             console.log("in the get user---->", state.user);
             return state.user;
+        },
+        getValidationErrors(state) {
+            return state.validationErrors;
         },
     },
     actions: {
@@ -23,31 +28,36 @@ export const useUserStore = defineStore('user', {
                 console.log("data------------>", data)
                 localStorage.setItem("user", JSON.stringify(data.user));
                 localStorage.setItem("userAuth", data.user.token);
-                this.user = data.data; // Directly modify the state
+                this.user = data.data; 
             } catch (error) {
                 console.log(error);
             }
         },
-    },
-
-
-    async registerUser(payload) {
-        try {
-            const { data } = await axios.post("/users/register", payload);
-            console.log("in the register---> ", data.status);
-            if (data.status == 200) {
-                commit("SET_VALIDATION_ERRORS", null);
+        async register(payload) {
+            try {
+                const response = await axios.post("/api/register", payload);
+                console.log("in the register---> ", response);
+                alert(response.message);
+                this.validationErrors = {};
+            } catch (error) {
+                if (error.response && error.response.data && error.response.data.error) {
+                    const errors = error.response.data.error;
+                    this.validationErrors = {};
+                    errors.forEach((errorMsg) => {
+                        if (errorMsg.includes("email")) {
+                            console.log("error-->", errorMsg);
+                            this.validationErrors.email = errorMsg;
+                        }
+                        if (errorMsg.includes("password confirmation")) {
+                            this.validationErrors.password_confirmation = errorMsg;
+                            console.log("error-->", errorMsg);
+                        }
+                    });
+                }
             }
-        } catch (error) {
-            if (error.response.status == 403) {
-                commit("SET_VALIDATION_ERRORS", error.response.data.errors);
-            }
-            console.error("Error registering user:", error.response.data.errors);
-            console.error("Error registering user:", error);
-            //alert(error.response.data.message)
+        },
+        clearValidationErrors() {
+            this.validationErrors = {};
         }
     },
-
-
-},
-);
+});

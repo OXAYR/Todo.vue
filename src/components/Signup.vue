@@ -10,29 +10,42 @@
 				placeholder="Email"
 				class="mt-4 p-2 border border-gray-300 rounded-md w-full"
 			/>
+			<p
+				v-if="validationErrors.email"
+				class="text-red-500 text-sm"
+			>
+				{{ validationErrors.email }}
+			</p>
+
 			<input
 				type="password"
 				v-model="form.password"
 				placeholder="Password"
 				class="mt-4 p-2 border border-gray-300 rounded-md w-full"
 			/>
+			<p
+				v-if="validationErrors.password"
+				class="text-red-500 text-sm"
+			>
+				{{ validationErrors.password }}
+			</p>
 
 			<input
 				type="password"
 				placeholder="Confirm Password"
-				v-model="form.confirmPassword"
+				v-model="form.password_confirmation"
 				class="mt-4 p-2 border border-gray-300 rounded-md w-full"
 			/>
+			<p
+				v-if="validationErrors.password_confirmation"
+				class="text-red-500 text-sm"
+			>
+				{{ validationErrors.password_confirmation }}
+			</p>
 		</div>
-		<p
-			v-if="validationErrors.confirmPassword"
-			class="text-red text-sm"
-		>
-			{{ validationErrors.confirmPassword }}
-		</p>
 		<button
 			class="mt-4 px-4 sm:px-24 py-2 sm:py-3 text-black hover:bg-gray-200 rounded"
-			@click="toValidateForm(form)"
+			@click="toValidateForm"
 		>
 			Register
 		</button>
@@ -40,66 +53,38 @@
 </template>
 
 <script setup>
-	import { ref } from "vue";
+	import { ref, computed } from "vue";
 	import { useRouter } from "vue-router";
-
 	import { useUserStore } from "@/stores/userStore";
 
 	const form = ref({
 		email: "",
 		password: "",
-		confirmPassword: "",
-	});
-
-	const confirmPassword = ref("");
-	const validationErrors = ref({
-		name: "",
-		password: "",
-		email: "",
-		confirmPassword: "",
+		password_confirmation: "",
 	});
 
 	const userStore = useUserStore();
 	const router = useRouter();
-	const toValidateForm = (obj) => {
-		validationErrors.value = [];
-		const usernamePattern = new RegExp(
-			"^(?=.*[0-9!@#$%^&*()_+{}[\\]:;<>,.?~\\/\\-=\\'|\"]).*$"
-		);
-		const passwordPattern = new RegExp(
-			"^(?=.*[A-Z])(?=.*[0-9!@#$%^&*()_+{}[\\]:;<>,.?~\\/\\-=\\'|\"]).{8,}$"
-		);
-		const emailPattern = new RegExp(
-			"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
-		);
 
-		if (obj.name !== "" && !usernamePattern.test(obj.name)) {
-			validationErrors.name.value.push(
-				"Add a number in the name and remove empty spaces"
-			);
-		} else if (obj.password !== "" && !passwordPattern.test(obj.password)) {
-			validationErrors.password.value.push(
-				"Password must start with a capital letter and must contain a number & special character"
-			);
-		} else if (obj.password !== confirmPassword.value) {
-			validationErrors.confirmPassword.value.push("Password does not match");
-		} else if (obj.email !== "" && !emailPattern.test(obj.email)) {
-			validationErrors.email.value.push("Invalid Email");
+	const validationErrors = computed(() => userStore.validationErrors); 
+
+	const toValidateForm = () => {
+		if (
+			form.email !== "" &&
+			form.value.password !== "" &&
+			form.value.password_confirmation !== ""
+		) {
+			userStore.clearValidationErrors();
+			toStoreForm(form.value);
 		} else {
-			toStoreForm(obj);
+			alert("fill the fields");
 		}
 	};
 
-	const toStoreForm = async (obj) => {
-		if (
-			obj.value.email !== "" &&
-			obj.value.password !== "" &&
-			obj.value.name !== "" &&
-			obj.value.confirmPassword !== ""
-		) {
-			console.log("In the component to store--->", form.value);
-			await store.dispatch("user/registerUser", form.value);
-			if (!validationErrors.value) router.push("/");
+	const toStoreForm = async (formData) => {
+		await userStore.register(formData);
+		if (Object.keys(userStore.validationErrors).length === 0) {
+			router.push("/login"); 
 		}
 	};
 </script>
