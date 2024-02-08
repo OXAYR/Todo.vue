@@ -28,8 +28,10 @@ export const useUserStore = defineStore('user', {
                 console.log("data------------>", data);
                 localStorage.setItem("user", JSON.stringify(data.user));
                 localStorage.setItem("userAuth", data.user.token);
+                const tokenExpirationTime = Date.now() / 1000 + 3600;
+                localStorage.setItem('tokenExpirationTime', tokenExpirationTime);
                 this.user = data.data;
-                this.loginErrorMessage = ''; 
+                this.loginErrorMessage = '';
             } catch (error) {
                 this.isLoading = false;
                 console.log(error);
@@ -40,12 +42,12 @@ export const useUserStore = defineStore('user', {
                         if (errorMsg.includes("email")) {
                             console.log("error-->", errorMsg);
                             this.validationErrors.email = errorMsg;
-                        } else if (errorMsg.includes("password")) { 
-                            this.loginErrorMessage = "Invalid password"; 
+                        } else if (errorMsg.includes("password")) {
+                            this.loginErrorMessage = "Invalid password";
                         }
                     });
                 }
-                throw error; 
+                throw error;
             }
         },
         async register(payload) {
@@ -78,7 +80,7 @@ export const useUserStore = defineStore('user', {
             try {
                 this.isLoading = true;
                 console.log("Payload--------->", token);
-                const { data } = await axios.post("/api/logout", {token});
+                const { data } = await axios.post("/api/logout", { token });
                 this.isLoading = false;
                 console.log("data------------>", data);
                 localStorage.removeItem("user");
