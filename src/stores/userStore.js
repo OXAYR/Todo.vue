@@ -24,13 +24,28 @@ export const useUserStore = defineStore('user', {
                 this.isLoading = true;
                 console.log("Payload--------->", payload);
                 const { data } = await axios.post("/api/login", payload);
-                this.Loading = false;
-                console.log("data------------>", data)
+                this.isLoading = false;
+                console.log("data------------>", data);
                 localStorage.setItem("user", JSON.stringify(data.user));
                 localStorage.setItem("userAuth", data.user.token);
-                this.user = data.data; 
+                this.user = data.data;
+                this.loginErrorMessage = ''; // Clear login error message on successful login
             } catch (error) {
+                this.isLoading = false;
                 console.log(error);
+                if (error.response && error.response.data && error.response.data.error) {
+                    const errors = error.response.data.error;
+                    this.validationErrors = {};
+                    errors.forEach((errorMsg) => {
+                        if (errorMsg.includes("email")) {
+                            console.log("error-->", errorMsg);
+                            this.validationErrors.email = errorMsg;
+                        } else if (errorMsg.includes("password")) { // Handle password error specifically
+                            this.loginErrorMessage = "Invalid password"; // Set login error message for password error
+                        }
+                    });
+                }
+                throw error; // Re-throw the error to propagate it to the component
             }
         },
         async register(payload) {
