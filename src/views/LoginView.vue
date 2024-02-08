@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<!-- <AllTodos /> -->
 		<Login />
 	</div>
 </template>
