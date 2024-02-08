@@ -80,52 +80,44 @@
 		</form>
 	</div>
 </template>
-
 <script setup>
-	import { ref, computed, onMounted } from "vue";
-	import axios from "axios";
-	import { useTodoStore } from "@/stores/todoStore";
-	import { useRoute, useRouter } from "vue-router";
-	const route = useRoute();
-	const router = useRouter();
-	const currentRoute = ref(route.path);
-	const { addTodo, updateTodo, getSelectedTodo } = useTodoStore();
+		import { ref, computed, onMounted } from "vue";
+		import { useTodoStore } from "@/stores/todoStore";
+		import { useRoute } from "vue-router";
+	import router from "@/router";
 
-	const mode = computed(() => {
-		return currentRoute.value.includes("/edit/") ? "edit" : "add";
-	});
+		const route = useRoute();
+		const todoStore = useTodoStore();
+		const mode = computed(() => (route.path.includes("/edit/") ? "edit" : "add"));
 
-	const selectedTodo = computed(() => getSelectedTodo);
-	const newTodo = ref({
-		title: "" || selectedTodo?.title,
-		description: "" || selectedTodo?.description,
-	});
+		const selectedTodo = computed(() => todoStore.getSelectedTodo);
 
-	onMounted(async () => {
-		if (mode.value === "edit") {
-			const todoId = extractTodoIdFromRoute();
-			await fetchTodoById(todoId);
+		console.log("Selected todo in the componet----------->", selectedTodo.value);
+		const newTodo = ref({
+			title: selectedTodo.value?.title || "",
+			description: selectedTodo.value?.description || "",
+		});
+
+		onMounted(() => {
+			if (mode.value === "edit") {
+				const todoId = route.params.id;
+				todoStore.fetchTodoById(todoId);
+			}
+		});
+
+		async function  handleSubmit() {
+			if (!newTodo.value.title.trim()) {
+				alert("Please enter a valid title.");
+				return;
+			}
+
+			if (mode.value === "add") {
+				await	todoStore.addTodo(newTodo.value);
+			} else {
+				await todoStore.updateTodo(newTodo.value, route.params.id);
+			}
+			router.push("/todos")
+			newTodo.value = { title: "", description: "" };
+
 		}
-	});
-
-	function handleSubmit() {
-		if (!newTodo.value.title.trim()) {
-			alert("Please enter a valid title.");
-			return;
-		}
-
-		if (mode.value === "add") {
-			addTodo(newTodo);
-		} else {
-			updateTodo(newTodo);
-		}
-
-		newTodo.value = { title: "", description: "" };
-	}
-
-	function extractTodoIdFromRoute() {
-		// Assuming you're using Vue Router and the route has a parameter named "id"
-		const todoId = currentRoute.value.params.id;
-		return todoId;
-	}
 </script>

@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<AllTodos />
-		<!-- <Login /> -->
+		<!-- <AllTodos /> -->
+		<Login />
 	</div>
 </template>
 

@@ -7,12 +7,13 @@ export const useTodoStore = defineStore('todo', {
         selectedTodo: [],
     }),
     getters: {
-        getTodos(state) {
-            console.log("these are the todos----------->", state.todos)
-            return state.todos;
+        getTodos({ todos }) {
+            console.log("these are the todos----------->", todos)
+            return todos;
         },
-        getSelectedTodo(state) {
-            return state.selectedTodo;
+        getSelectedTodo({ selectedTodo }) {
+            console.log("Selected todo in the getters ", selectedTodo)
+            return selectedTodo;
         }
     },
     actions: {
@@ -27,8 +28,9 @@ export const useTodoStore = defineStore('todo', {
             this.todos.push(newTodo);
         },
         async updateTodo(updatedTodo, todoId) {
+            console.log("updated todo ", updatedTodo, " id ", todoId)
             const userToken = localStorage.getItem("userAuth");
-            const response = await axios.put('/api/item', updatedTodo, {
+            const response = await axios.put(`/api/item/${todoId}`, updatedTodo, {
                 headers: {
                     Authorization: `Bearer ${userToken}`,
                 },
@@ -64,8 +66,9 @@ export const useTodoStore = defineStore('todo', {
                     Authorization: `Bearer ${userToken}`,
                 },
             });
-            console.log("response----------> ", response.data.items.data);
-            this.selectedTodo = response.data.items.data;
+            console.log("response----------> ", response.data.item);
+            this.selectedTodo = response.data.item;
+
         }
     },
 });
