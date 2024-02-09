@@ -18,10 +18,12 @@
 </template>
 
 <script setup>
+// accepting the props from the parent 
 	const props = defineProps({
 		todo: Object,
 	});
-	const emit = defineEmits(["delete-todo", "edit-todo"]);
+const emit = defineEmits(["delete-todo", "edit-todo"]);
+	// emitting the delete todo function from the child to the parent TodoView
 	const deleteTodo = (todoId) => {
 		console.log(todoId);
 		var answer = confirm("Do you really want to delete the Todo?");
@@ -29,6 +31,8 @@
 			emit("delete-Todo", todoId);
 		}
 	};
+
+	// emitting the edit todo function from the child to the parent TodoView
 
 	const editTodo = (todoId) => {
 		console.log("todoId", todoId);

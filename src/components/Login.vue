@@ -70,12 +70,17 @@
 	});
 	const userStore = useUserStore();
 	const router = useRouter();
+
+	//For the validation error coming from the backend
 	const validationErrors = computed(() => userStore.validationErrors);
 	const loginErrorMessage = computed(() => userStore.loginErrorMessage);
+
+	// to check either the fields are empty or not
 
 	const toValidateForm = async () => {
 		if (formLogin.value.email !== "" && formLogin.value.password !== "") {
 			await userStore.loginAuth(formLogin.value);
+			// to check either the errors are gone or not
 			if (
 				Object.keys(userStore.validationErrors).length === 0 &&
 				!userStore.loginErrorMessage

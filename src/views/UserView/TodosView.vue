@@ -43,7 +43,10 @@
 	const todosList = ref(null);
 	const searchQuery = ref("");
 
+	// getting all todos from the pinia store
 	const allTodos = computed(() => todoStore.getTodos);
+
+	// filtered the todo if the user search for specific todo title
 
 	const filteredTodos = computed(() => {
 		const query = searchQuery.value.toLowerCase().trim();
@@ -56,20 +59,28 @@
 		}
 	});
 
+	// for loader
+
 	const loading = computed(() => todoStore.isLoading);
 
+	// custom function which invoke the pinia sstore fetch todo function
 	const fetchTodos = async (page) => {
 		await todoStore.fetchTodos(page);
 	};
 
+	// custom function which invoke the pinia sstore delete todo function emiting from the child
 	const deleteTodo = async (todoId) => {
 		await todoStore.deleteTodo(todoId);
 	};
+
+	// custom function which invoke the pinia sstore edit todo function emiting from the child
 
 	const editTodo = async (todoId) => {
 		await todoStore.fetchTodoById(todoId);
 		await router.push({ path: `todo/edit/${todoId}` });
 	};
+
+	// for infinite scroll if the user reaches the bottom fetch more todos
 
 	const loadNextPage = async () => {
 		const nextPage = todoStore.currentPage + 1;
@@ -79,10 +90,14 @@
 		}
 	};
 
+	// on mounted fetching todo initially by hardcoding 1 which is for the page number 1
+	//added an event listener on scroll which will listen if the windows is scrolled
 	onMounted(() => {
 		fetchTodos(1);
 		window.addEventListener("scroll", getNextPageOnScroll);
 	});
+
+	// as the windows scroll it will check either the window is at the bottom or not if yes it will request to fetch more todo
 
 	const getNextPageOnScroll = () => {
 		const bottomOfWindow =

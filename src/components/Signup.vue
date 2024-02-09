@@ -66,7 +66,12 @@
 	const userStore = useUserStore();
 	const router = useRouter();
 
+	// for the validation errors coming from the backend
 	const validationErrors = computed(() => userStore.validationErrors); 
+
+
+	//Check if the input fields are empty or not 
+
 
 	const toValidateForm = () => {
 		if (
@@ -81,8 +86,12 @@
 		}
 	};
 
+	// sending request to the pinia store for work
+
 	const toStoreForm = async (formData) => {
 		await userStore.register(formData);
+		
+		// checking if the errors are empty
 		if (Object.keys(userStore.validationErrors).length === 0) {
 			router.push("/login"); 
 		}

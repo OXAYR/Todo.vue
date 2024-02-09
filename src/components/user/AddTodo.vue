@@ -42,40 +42,43 @@
 	import { ref, computed, onMounted } from "vue";
 	import { useTodoStore } from "@/stores/todoStore";
 	import router from "@/router";
-
+	// getting the todo pinia store to work on it
 	const todoStore = useTodoStore();
+	// getting this to get the current route for edit todo mode
 	const route = router.currentRoute;
-
+	// computed property to call the getter of the todo it will work always when the dependencies changes
 	const selectedTodo = computed(() => todoStore.getSelectedTodo);
-
+	// checking the route on runtime to make the adjustment accordingly
 	const mode = computed(() =>
 		route.value.path.includes("/edit/") ? "edit" : "add"
 	);
-
+	// if it is in edit mode give it the pervios selected todo value otherwise give it the null values
 	const newTodo = ref({
 		title: selectedTodo.value?.title || "",
 		description: selectedTodo.value?.description || "",
 	});
-
+	// if it is the in the edit mode it should fetch the selected todo by getting the todo id from the params
 	onMounted(() => {
 		if (mode.value === "edit") {
 			const todoId = route.value.params.id;
 			todoStore.fetchTodoById(todoId);
 		}
 	});
-
+	// handles the submission of the todo if the fields are not empty
 	async function handleSubmit() {
 		if (!newTodo.value.title.trim()) {
 			alert("Please enter a valid title.");
 			return;
 		}
-
+		// if in add mode it should invoke the pinia store add function
 		if (mode.value === "add") {
 			await todoStore.addTodo(newTodo.value);
 		} else {
+			// if in edit mode it should invoke the pinia store edit function
 			await todoStore.updateTodo(newTodo.value, route.value.params.id);
 		}
 		router.push("/");
+		// assinging new null values to empty the fields
 		newTodo.value = { title: "", description: "" };
 	}
 </script>

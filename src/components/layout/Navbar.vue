@@ -100,13 +100,15 @@
 	const router = useRouter();
 
 	const userStore = useUserStore();
+	// getting user token that we get stored in the local storage on the sign in process
 	const userAuth = localStorage.getItem("userAuth");
+	// for conditionally rendering the navbar for the guest and for the user
 	const isLoggedIn = userAuth ? true : false;
-
+	// custom function to navigate to the route
 	const navigateTo = (path) => {
 		router.push(path);
 	};
-
+	// logging out the user if he clicks on it
 	const logout = async () => {
 		await userStore.logout(userAuth);
 		router.push("/login");
