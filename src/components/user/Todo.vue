@@ -10,19 +10,19 @@
 		</button>
 		<button
 			@click="editTodo(todo.id)"
-			class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+			class="mt-2 ml-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
 		>
-			Edit
+			View/Update
 		</button>
 	</li>
 </template>
 
 <script setup>
-// accepting the props from the parent 
+	// accepting the props from the parent
 	const props = defineProps({
 		todo: Object,
 	});
-const emit = defineEmits(["delete-todo", "edit-todo"]);
+	const emit = defineEmits(["delete-todo", "edit-todo"]);
 	// emitting the delete todo function from the child to the parent TodoView
 	const deleteTodo = (todoId) => {
 		console.log(todoId);
@@ -35,7 +35,6 @@ const emit = defineEmits(["delete-todo", "edit-todo"]);
 	// emitting the edit todo function from the child to the parent TodoView
 
 	const editTodo = (todoId) => {
-		console.log("todoId", todoId);
 		emit("edit-todo", todoId);
 	};
 </script>

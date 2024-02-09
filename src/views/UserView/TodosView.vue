@@ -84,7 +84,7 @@
 
 	const loadNextPage = async () => {
 		const nextPage = todoStore.currentPage + 1;
-		console.log("Next page:", nextPage);
+
 		if (nextPage <= todoStore.lastPage) {
 			await todoStore.fetchTodos(nextPage);
 		}
@@ -104,7 +104,6 @@
 			window.innerHeight + window.scrollY >=
 			document.documentElement.scrollHeight - 1;
 
-		console.log("bottom of the window:", bottomOfWindow);
 		if (bottomOfWindow && !loading.value) {
 			loadNextPage();
 		}

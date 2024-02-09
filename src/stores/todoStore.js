@@ -10,18 +10,16 @@ export const useTodoStore = defineStore('todo', {
     }),
     getters: {
         getTodos({ todos }) {
-            console.log("these are the todos----------->", todos)
+
             return todos;
         },
         getSelectedTodo({ selectedTodo }) {
-            console.log("Selected todo in the getters ", selectedTodo)
             return selectedTodo;
         },
         isLoading({ loading }) {
             return loading;
         },
         getCurretPage({ currentPage }) {
-            console.log("curent page from the getter ", currentPage)
             return currentPage;
         },
 
@@ -39,7 +37,6 @@ export const useTodoStore = defineStore('todo', {
                         Authorization: `Bearer ${userToken}`,
                     },
                 });
-                console.log("response--------->", response);
                 this.todos.push(newTodo);
             } catch (error) {
                 console.error("Error adding todo:", error);
@@ -51,14 +48,12 @@ export const useTodoStore = defineStore('todo', {
         async fetchTodos(pageNumber) {
             this.loading = true;
             try {
-                console.log("pageNumber---------->", pageNumber);
                 const userToken = localStorage.getItem("userAuth");
                 const response = await axios.get(`/api/items?page=${pageNumber}`, {
                     headers: {
                         Authorization: `Bearer ${userToken}`,
                     },
                 });
-                console.log("response----------> ", response.data);
 
                 if (pageNumber === 1) {
                     this.todos = response.data.items.data;
@@ -67,10 +62,9 @@ export const useTodoStore = defineStore('todo', {
                 }
 
                 this.currentPage = response.data.items.current_page;
-                console.log("in the req", this.currentPage);
 
                 this.lastPage = response.data.items.last_page;
-                console.log("in the req", this.lastPage);
+
             } catch (error) {
                 console.error("Error fetching todos:", error);
             } finally {
@@ -81,7 +75,6 @@ export const useTodoStore = defineStore('todo', {
         async deleteTodo(todoId) {
             this.loading = true;
             try {
-                console.log("Todoid------------>", todoId);
                 const userToken = localStorage.getItem("userAuth");
                 const response = await axios.delete(`/api/item/${todoId}`, {
                     headers: {
@@ -90,7 +83,6 @@ export const useTodoStore = defineStore('todo', {
                 });
                 const deletedIndex = this.todos.findIndex((todo) => todo.id === todoId);
                 const deletedTodo = this.todos[deletedIndex];
-                console.log("deleted todo --------->", deletedTodo);
                 this.todos.splice(deletedIndex, 1);
             } catch (error) {
                 console.error("Error deleting todo:", error);
@@ -101,7 +93,6 @@ export const useTodoStore = defineStore('todo', {
         async updateTodo(updatedTodo, todoId) {
             this.loading = true;
             try {
-                console.log("updated todo ", updatedTodo, " id ", todoId);
                 const userToken = localStorage.getItem("userAuth");
                 const response = await axios.put(`/api/item/${todoId}`, updatedTodo, {
                     headers: {
@@ -123,9 +114,7 @@ export const useTodoStore = defineStore('todo', {
                         Authorization: `Bearer ${userToken}`,
                     },
                 });
-                console.log("response----------> ", response.data.item);
                 this.selectedTodo = response.data.item;
-                console.log("selectedTod0---------->", this.selectedTodo)
             } catch (error) {
                 console.error("Error fetching todo by ID:", error);
             } finally {

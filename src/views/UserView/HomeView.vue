@@ -17,9 +17,6 @@
 		const tokenExpirationTime = localStorage.getItem("tokenExpirationTime");
 		const currentTime = Date.now() / 1000;
 		const token = localStorage.getItem("userAuth");
-		console.log("token time---------->", tokenExpirationTime);
-		console.log("token time---------->", token);
-		console.log("token time---------->", currentTime);
 
 		// if tokken is expired then send the request to refresh the token
 		if (tokenExpirationTime && currentTime > tokenExpirationTime) {

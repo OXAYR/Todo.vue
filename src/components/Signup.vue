@@ -67,11 +67,9 @@
 	const router = useRouter();
 
 	// for the validation errors coming from the backend
-	const validationErrors = computed(() => userStore.validationErrors); 
+	const validationErrors = computed(() => userStore.validationErrors);
 
-
-	//Check if the input fields are empty or not 
-
+	//Check if the input fields are empty or not
 
 	const toValidateForm = () => {
 		if (
@@ -90,10 +88,10 @@
 
 	const toStoreForm = async (formData) => {
 		await userStore.register(formData);
-		
+
 		// checking if the errors are empty
 		if (Object.keys(userStore.validationErrors).length === 0) {
-			router.push("/login"); 
+			router.push("/login");
 		}
 	};
 </script>

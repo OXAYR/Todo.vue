@@ -111,6 +111,6 @@
 	// logging out the user if he clicks on it
 	const logout = async () => {
 		await userStore.logout(userAuth);
-		router.push("/login");
+		router.go();
 	};
 </script>
