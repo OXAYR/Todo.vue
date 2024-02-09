@@ -40,10 +40,10 @@
 		<!-- Display login error message -->
 
 		<button
-			class="mt-4 px-12 py-2 sm:px-24 sm:py-3 bg-rose-400 text-black hover:bg-rose-300 rounded-lg"
+			class="mt-4 px-12 py-2 sm:px-24 sm:py-3 bg-blue-950 text-black hover:bg-blue-800 rounded-lg"
 			@click="toValidateForm"
 		>
-			<p class="text-black font-serif text-center">SignIn</p>
+			<p class="text-white font-serif text-center">SignIn</p>
 		</button>
 
 		<router-link
@@ -71,7 +71,7 @@
 	const userStore = useUserStore();
 	const router = useRouter();
 	const validationErrors = computed(() => userStore.validationErrors);
-	const loginErrorMessage = computed(() => userStore.loginErrorMessage); 
+	const loginErrorMessage = computed(() => userStore.loginErrorMessage);
 
 	const toValidateForm = async () => {
 		if (formLogin.value.email !== "" && formLogin.value.password !== "") {
@@ -82,6 +82,8 @@
 			) {
 				router.push("/");
 			}
+		} else {
+			alert("fill all the fields");
 		}
 	};
 </script>

@@ -41,16 +41,17 @@
 <script setup>
 	import { ref, computed, onMounted } from "vue";
 	import { useTodoStore } from "@/stores/todoStore";
-	import { useRoute } from "vue-router";
 	import router from "@/router";
 
-	const route = useRoute();
 	const todoStore = useTodoStore();
-	const mode = computed(() => (route.path.includes("/edit/") ? "edit" : "add"));
+	const route = router.currentRoute;
 
 	const selectedTodo = computed(() => todoStore.getSelectedTodo);
 
-	console.log("Selected todo in the componet----------->", selectedTodo.value);
+	const mode = computed(() =>
+		route.value.path.includes("/edit/") ? "edit" : "add"
+	);
+
 	const newTodo = ref({
 		title: selectedTodo.value?.title || "",
 		description: selectedTodo.value?.description || "",
@@ -58,7 +59,7 @@
 
 	onMounted(() => {
 		if (mode.value === "edit") {
-			const todoId = route.params.id;
+			const todoId = route.value.params.id;
 			todoStore.fetchTodoById(todoId);
 		}
 	});
@@ -72,7 +73,7 @@
 		if (mode.value === "add") {
 			await todoStore.addTodo(newTodo.value);
 		} else {
-			await todoStore.updateTodo(newTodo.value, route.params.id);
+			await todoStore.updateTodo(newTodo.value, route.value.params.id);
 		}
 		router.push("/");
 		newTodo.value = { title: "", description: "" };

@@ -67,6 +67,7 @@
 	};
 
 	const editTodo = async (todoId) => {
+		await todoStore.fetchTodoById(todoId);
 		await router.push({ path: `todo/edit/${todoId}` });
 	};
 

@@ -125,6 +125,7 @@ export const useTodoStore = defineStore('todo', {
                 });
                 console.log("response----------> ", response.data.item);
                 this.selectedTodo = response.data.item;
+                console.log("selectedTod0---------->", this.selectedTodo)
             } catch (error) {
                 console.error("Error fetching todo by ID:", error);
             } finally {

@@ -7,7 +7,7 @@ export const useUserStore = defineStore('user', {
     state: () => ({
         user: {},
         isLoading: false,
-        validationErrors: {}, // Maintain validation errors state
+        validationErrors: {},
     }),
     getters: {
         getUser(state) {
@@ -53,8 +53,8 @@ export const useUserStore = defineStore('user', {
         async register(payload) {
             try {
                 const response = await axios.post("/api/register", payload);
-                console.log("in the register---> ", response);
-                alert(response.message);
+                console.log("in the register---> ", response.data);
+                alert(response.data.message);
                 this.validationErrors = {};
             } catch (error) {
                 if (error.response && error.response.data && error.response.data.error) {
@@ -83,8 +83,7 @@ export const useUserStore = defineStore('user', {
                 const { data } = await axios.post("/api/logout", { token });
                 this.isLoading = false;
                 console.log("data------------>", data);
-                localStorage.removeItem("user");
-                localStorage.removeItem("userAuth");
+                localStorage.clear();
             }
             catch (error) {
                 console.log(error);
@@ -93,15 +92,19 @@ export const useUserStore = defineStore('user', {
 
         async refreshToken(token) {
             try {
-
-                const response = await axios.post(`/api/refresh-token/${token}`);
+                console.log("token in the action-------->", token)
+                const response = await axios.post(
+                    `/api/refresh-token/${token}`,
+                    null,
+                );
                 console.log("respone-------->token", response);
-                const newAccessToken = response.access_token;
+                const newAccessToken = response.data.access_token;
                 localStorage.setItem('userAuth', newAccessToken);
                 const tokenExpirationTime = Date.now() / 1000 + 3600;
                 localStorage.setItem('tokenExpirationTime', tokenExpirationTime);
             } catch (error) {
                 console.error('Error refreshing token:', error);
+                throw error;
             }
         }
     }
